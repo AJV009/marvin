@@ -14,7 +14,7 @@ idna==3.4
 langchain==0.0.141
 marshmallow==3.19.0
 marshmallow-enum==1.5.1
--e git+ssh://git@github.com/AJV009/marvin.git@e362fad990c264be09665a0e8e8452c9d8844d7b#egg=marvin
+-e .
 multidict==6.0.4
 mypy-extensions==1.0.0
 numpy==1.24.2

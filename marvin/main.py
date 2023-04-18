@@ -1,8 +1,8 @@
 from slack_bolt import App
-from .utils.slack.connect import SlackConnection
-from .utils.slack.helpers import SlackHelpers
-from .utils.openai.endpoint import OpenAIHelpers
-from .utils.utils import utils as marv_utils
+from marvin.utils.slack.connect import SlackConnection
+from marvin.utils.slack.helpers import SlackHelpers
+from marvin.utils.openai.endpoint import OpenAIHelpers
+from marvin.utils.utils import utils as marv_utils
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -32,7 +32,6 @@ def handle_mention(body, say):
         else:
             model = marv_utils.extract_model(messages)
             say(openai.chat(model), thread_ts=body["event"]["ts"])
-
 
 if __name__ == "__main__":
     # Initialize SlackHelpers
