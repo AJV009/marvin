@@ -55,27 +55,56 @@ class OpenAIHelpers:
             {"role": "system", "content": self.prompts["system"]}]
         if (len(self.messages) > 0):
             bot_id = self.slack_helpers.get_bot_id()
+
             for message in self.messages:
-                # check for bot messages
-                if (message["user_id"] == bot_id):
-                    # avoid messages with flags
-                    if (not message["message"].startswith(tuple(self.flags.values()))):
+                # Check for bot messages
+                if message["user_id"] == bot_id:
+                    # Avoid messages with flags
+                    if not message["message"].startswith(tuple(self.flags.values())):
                         openai_messages.append({
                             "role": "assistant",
                             "content": message["message"]
                         })
                 else:
+                    # Add user messages
                     openai_messages.append({
                         "role": "user",
-                        "content": message["user"] + ': '+message["message"]
+                        "content": f'[{message["user"]}] {message["message"]}'
                     })
+
             self.messages = openai_messages
 
-    # Sends the chat request to OpenAI
-    def chat(self, model="gpt-3.5-turbo"):
+    def model_extractor(self):
+        MODELS = {"[MARVIN-GPT4]": "gpt-4", "[MARVIN-GPT3]": "gpt-3.5-turbo"}
+        DEFAULT_MODEL = "gpt-3.5-turbo"
+
+        model = DEFAULT_MODEL
+        model_found = False
+
+        for message in reversed(self.messages):
+            new_content = message["content"]
+            for identifier, model_name in MODELS.items():
+                if identifier in new_content:
+                    if not model_found:
+                        model = model_name
+                        model_found = True
+                    new_content = new_content.replace(identifier, "")
+            message["content"] = new_content
+
+        return model
+
+    def chat(self):
+        # Prepare data for the chat request
         self.data_prep()
+
+        # Extract the model from messages and update messages
+        model = self.model_extractor()
+
+        # Send the chat request to OpenAI
         response = openai.ChatCompletion.create(
             model=model,
             messages=self.messages,
         )
+
+        # Return the content of the response
         return response['choices'][0]['message']['content']
