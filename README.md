@@ -22,7 +22,7 @@ OPENAI_API_KEY=sk-<your-openai-api-key>
 ## Note
 - You can tailor Marvins system prompt at `marvin/data/prompts.json`
 - Whenever you mention @ marvin, it will reply. (It should be added to the channel)
-- What's with the deal of double messages in thread? So my slack bot is currently extremely slow, its not only my network problem but the whole socket based connection thing and multiple unnecessary loops. So I have added some (>99,<101) dummy responses in a file in the project dir itself, it replies with :thinking_face::brain::zap: in a thread to give you an assurance that the event has been triggered, acknowledged and you have to wait for the response.
+- What's with the deal of double messages in thread? So my slack bot is currently extremely slow, its not only my network problem but the whole socket based connection thing and multiple unnecessary loops. So I have added some (>99,<101) dummy responses in a file in the project dir itself, it replies with :thinking_face::brain::zap: in a thread to give you an assurance that the event has been triggered, acknowledged and you have to wait for the response. (But these hard coded responses from the bot is ignored when passing all the thread data to chat api)
 - By default it uses the 'gpt-3.5-turbo' model, but with a flag you can use GPT-4 as well. But nah I won't tell you how to, just figure it out. Read the code or checkout the sample below...
 
 ## What's next for Marvin?
