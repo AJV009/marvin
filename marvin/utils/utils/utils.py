@@ -10,3 +10,10 @@ def jprint(obj):
 def oprint(obj):
     print(dir(obj))
 
+# Extract the model from the messages
+def extract_model(messages):
+    for message in reversed(messages):
+        if "[MARVIN-GPT4]" in message["message"]:
+            return "gpt-4"
+        else:
+            return "gpt-3.5-turbo"

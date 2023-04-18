@@ -67,15 +67,15 @@ class OpenAIHelpers:
                 else:
                     openai_messages.append({
                         "role": "user",
-                        "content": message["user"] +': '+message["message"]
+                        "content": message["user"] + ': '+message["message"]
                     })
             self.messages = openai_messages
 
     # Sends the chat request to OpenAI
-    def chat(self):
+    def chat(self, model="gpt-3.5-turbo"):
         self.data_prep()
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=model,
             messages=self.messages,
         )
         return response['choices'][0]['message']['content']

@@ -30,7 +30,8 @@ def handle_mention(body, say):
         if (data["moderation"]):
             say(data["moderation"], thread_ts=body["event"]["ts"])
         else:
-            say(openai.chat(), thread_ts=body["event"]["ts"])
+            model = marv_utils.extract_model(messages)
+            say(openai.chat(model), thread_ts=body["event"]["ts"])
 
 
 if __name__ == "__main__":

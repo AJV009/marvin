@@ -28,7 +28,7 @@ The current version has a lot of space for improvement. A few noted things are:
 - [X] Passing threads to the API to experience ChatGPT's full potential to retain any information from the past (but not too past)
 - [ ] Adapt and use LongChain for the next version (I initially planned to use LongChain even began working but I got a sudden request to get this up and running so avoided complexities.)
 - [ ] Mention other users using '@'
-- [ ] Access GPT-4 model on demand
+- [X] Access GPT-4 model on demand
 - [ ] Direct Message / DMs
 - [ ] API data Trimming and token limitation
 - [ ] Change the Slack socket connection to something faster (even the initial response takes a lot of time right now)
