@@ -15,5 +15,4 @@ def extract_model(messages):
     for message in reversed(messages):
         if "[MARVIN-GPT4]" in message["message"]:
             return "gpt-4"
-        else:
-            return "gpt-3.5-turbo"
+    return "gpt-3.5-turbo"
