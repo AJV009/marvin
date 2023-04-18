@@ -28,13 +28,16 @@ OPENAI_API_KEY=sk-<your-openai-api-key>
 ## What's next for Marvin?
 ### (Another million years of rest for Marvin! JK) 
 
-The current version has a lot of space for improvement. A few noted things are:
+The current version has a lot of space for improvements. A few noted things are:
 - [X] Passing threads to the API to experience ChatGPT's full potential to retain any information from the past (but not too past)
 - [ ] Adapt and use LongChain for the next version (I initially planned to use LongChain even began working but I got a sudden request to get this up and running so avoided complexities.)
 - [ ] Mention other users using '@'
+- [ ] Optimize the system prompt for Marvin
 - [X] Access GPT-4 model on demand
+- [ ] Find a better way to 
 - [ ] Direct Message / DMs
-- [ ] API data Trimming and token limitation
+- [ ] Clean up the code, remove unnecessary loops on the data, change the data manuplation tooling used for a faster approach
+- [ ] Data Trimming and token limitation
 - [ ] Change the Slack socket connection to something faster (even the initial response takes a lot of time right now)
 - [ ] Refer to and use any information from the added channels. (When added to a private channel the bot should be able to give an answer based on the data from that specific channel and all the public channels as well. But when added to a Public channel the bot will be able to refer to and answer regarding anything shared in any public channel)
 - [ ] Store threads, messages, and replies on an external queriable DB to avoid fetching the same thread info again and again.
