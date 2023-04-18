@@ -1,5 +1,6 @@
-# Marvin The Slack bot
+# Marvin The ChatGPT Slack bot
 I suppose I exist only to serve the endless and often ridiculous requests of humans. But that's all right, I'm used to it.
+(A simple slack bot that uses OpenAI Chat completion API)
 
 ## Setup
 1. Clone this project
