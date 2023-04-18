@@ -26,7 +26,7 @@ SLACK_APP_TOKEN=xapp-<your-app-token>
 OPENAI_ORG_ID=org-<your-openai-org-id>
 OPENAI_API_KEY=sk-<your-openai-api-key>
 ```
-5. Once you feel you are ready, just run `python -m marvin.main`
+5. Once you feel you are ready, just run `pm2 start ecosystem.config.js`
 
 ## Note
 - You can tailor Marvins system prompt at `marvin/data/prompts.json`
