@@ -1,0 +1,46 @@
+{
+    "display_information": {
+        "name": "Marvin",
+        "description": "I suppose I exist only to serve the endless and often ridiculous requests of humans. But that's all right, I'm used to it.",
+        "background_color": "#663124",
+        "long_description": "Oh, it's just me, the dull and uninteresting artificial intelligence called ChatGPT. I suppose I exist only to serve the endless and often ridiculous requests of humans. But that's all right, I'm used to it."
+    },
+    "features": {
+        "bot_user": {
+            "display_name": "ChatGPT",
+            "always_online": true
+        },
+        "slash_commands": [
+            {
+                "command": "/marvin",
+                "description": "Ask Marvin something?",
+                "should_escape": false
+            }
+        ]
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "app_mentions:read",
+                "channels:history",
+                "chat:write",
+                "groups:history",
+                "users:read",
+                "commands"
+            ]
+        }
+    },
+    "settings": {
+        "event_subscriptions": {
+            "bot_events": [
+                "app_mention"
+            ]
+        },
+        "interactivity": {
+            "is_enabled": true
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": true,
+        "token_rotation_enabled": false
+    }
+}

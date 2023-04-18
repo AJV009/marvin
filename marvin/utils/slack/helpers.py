@@ -1,0 +1,71 @@
+# Helper functions for Slack
+import re
+import os
+from slack_bolt import App
+from slack_sdk.errors import SlackApiError
+
+
+class SlackHelpers:
+
+    def __init__(self, init_self_app=False):
+        self.app = None
+        if (init_self_app):
+            self.app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
+        self.user_id_pattern = r"<@!?([A-Z0-9]+)>"
+
+    # Sets the slack app
+    def set_app(self, app):
+        self.app = app
+
+    # Replace user_id and username with real_name
+    def replace_usernames(self, text):
+        names = {id.group(): self.userid_to_realname(
+            id.group()[2:-1]) for id in re.finditer(self.user_id_pattern, text)}
+        return re.sub(self.user_id_pattern, lambda match: names[match.group()], text)
+
+    # Convert user_id to Slack real_name
+    def userid_to_realname(self, user_id):
+        try:
+            res = self.app.client.users_info(user=user_id)
+            real_name = res['user']['real_name']
+        except:
+            real_name = user_id
+        return real_name
+
+    # fetch all messages in a thread
+    def fetch_thread_messages(self, channel_id, thread_ts):
+        try:
+            response = self.app.client.conversations_replies(
+                channel=channel_id, ts=thread_ts)
+            messages = []
+            for message in response["messages"]:
+                messages.append({
+                    "user_id": message["user"],
+                    "user": self.userid_to_realname(message["user"]),
+                    "message": self.replace_usernames(message["text"])
+                })
+            while response["has_more"]:
+                response = self.app.client.conversations_replies(
+                    channel=channel_id,
+                    ts=thread_ts,
+                    cursor=response["response_metadata"]["next_cursor"]
+                )
+                for message in response["messages"]:
+                    messages.append({
+                        "user_id": message["user"],
+                        "user": self.userid_to_realname(message["user"]),
+                        "message": self.replace_usernames(message["text"])
+                    })
+        except SlackApiError as e:
+            print("Error fetching thread messages:", e)
+            return []
+        # returns a list of dicts with username and message
+        return messages
+
+    def get_bot_id(self):
+        try:
+            response = self.app.client.auth_test()
+            return response["user_id"]
+        except SlackApiError as e:
+            print("Error fetching bot id:", e)
+            return []
