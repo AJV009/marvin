@@ -3,10 +3,19 @@ I suppose I exist only to serve the endless and often ridiculous requests of hum
 (A simple slack bot that uses OpenAI Chat completion API)
 
 ## Setup
+
+### Prerequisite
+- Python 3
+- [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) (Python Virtual Environment Manager)
+- [pm2](https://pm2.io/) (Process Manager 2)
+
 1. Clone this project
 2. The following commands to install the requirements
 ```bash
 cd marvin
+mkvirtualenv marvin
+setvirtualenvproject
+workon marvin
 pip install -r requirements.txt
 ```
 3. Create a Slack app using the `manifest.json` file
