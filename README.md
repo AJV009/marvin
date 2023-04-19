@@ -37,7 +37,7 @@ OPENAI_API_KEY=sk-<your-openai-api-key>
 ## What's next for Marvin?
 ### (Another million years of rest for Marvin! JK) 
 
-The current version has a lot of space for improvements. A few noted things are:
+The current version has a lot of space for improvements. A few noted things are: (Most of these will require a mjor reworking on the repo, so they need to planned and split into different versions.)
 - [X] Passing threads to the API to experience ChatGPT's full potential to retain any information from the past (but not too past)
 - [ ] Adapt and use LongChain for the next version (I initially planned to use LongChain even began working but I got a sudden request to get this up and running so avoided complexities.)
 - [ ] Mention other users using '@'
@@ -51,6 +51,7 @@ The current version has a lot of space for improvements. A few noted things are:
 - [ ] Refer to and use any information from the added channels. (When added to a private channel the bot should be able to give an answer based on the data from that specific channel and all the public channels as well. But when added to a Public channel the bot will be able to refer to and answer regarding anything shared in any public channel)
 - [ ] Store threads, messages, and replies on an external queriable DB to avoid fetching the same thread info again and again.
 - [ ] Adapt the agents and tasks concept from AutoGPT
+- [ ] Ability to have custom system prompts, system prompt can be provided by the user and can be saved into the bot db for usage by others. So it can be LinuxGPT, DrupalGPT, TechWriterGPT, JournalistGPT, TitleGenGPT all at the same time. What it can be will be infinite and as far as ones imagination would go.
 
 ## Examples
 ![image](https://user-images.githubusercontent.com/42465795/232779792-557e594c-67a4-4e24-9f53-afa65b4a94ea.png)
