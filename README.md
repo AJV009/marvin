@@ -52,6 +52,7 @@ The current version has a lot of space for improvements. A few noted things are:
 - [ ] Store threads, messages, and replies on an external queriable DB to avoid fetching the same thread info again and again.
 - [ ] Adapt the agents and tasks concept from AutoGPT
 - [ ] Ability to have custom system prompts, system prompt can be provided by the user and can be saved into the bot db for usage by others. So it can be LinuxGPT, DrupalGPT, TechWriterGPT, JournalistGPT, TitleGenGPT all at the same time. What it can be will be infinite and as far as ones imagination would go.
+- [ ] Image to text, so that it can understand images too. Or wait for OpenAI to release there Image support they promised for GPT4. but we should still have a simple image to text for faster and smaller models like gpt-3.5-turbo
 
 ## Examples
 ![image](https://user-images.githubusercontent.com/42465795/232779792-557e594c-67a4-4e24-9f53-afa65b4a94ea.png)
