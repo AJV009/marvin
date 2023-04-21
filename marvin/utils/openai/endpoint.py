@@ -4,6 +4,7 @@ import os
 from os.path import exists
 import random
 from marvin.utils.slack.helpers import SlackHelpers
+from marvin.utils.autogpt.autogpt import AutoGPT
 
 
 class OpenAIHelpers:
@@ -75,7 +76,7 @@ class OpenAIHelpers:
             self.messages = openai_messages
 
     def model_extractor(self):
-        MODELS = {"[MARVIN-GPT4]": "gpt-4", "[MARVIN-GPT3]": "gpt-3.5-turbo"}
+        MODELS = {"[MARVIN-GPT4]": "gpt-4", "[MARVIN-GPT3]": "gpt-3.5-turbo", "[MARVIN-AUTOGPT]": "autogpt"}
         DEFAULT_MODEL = "gpt-3.5-turbo"
 
         model = DEFAULT_MODEL
@@ -94,17 +95,28 @@ class OpenAIHelpers:
         return model
 
     def chat(self):
+        # empty response
+        response = None
+
         # Prepare data for the chat request
         self.data_prep()
 
         # Extract the model from messages and update messages
         model = self.model_extractor()
 
-        # Send the chat request to OpenAI
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=self.messages,
-        )
+        # Custom AutoGPT Model
+        if model == "autogpt":
+            auto_gpt = AutoGPT(self.messages)
+            self.messages = auto_gpt.get_messages()
+            model = auto_gpt.get_model()
+
+        # simple responses
+        if response is None:
+            # Send the chat request to OpenAI
+            response = openai.ChatCompletion.create(
+                model=model,
+                messages=self.messages,
+            )
 
         # Return the content of the response
         return response['choices'][0]['message']['content']

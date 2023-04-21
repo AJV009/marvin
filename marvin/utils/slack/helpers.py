@@ -67,5 +67,4 @@ class SlackHelpers:
             response = self.app.client.auth_test()
             return response["user_id"]
         except SlackApiError as e:
-            print("Error fetching bot id:", e)
             return []

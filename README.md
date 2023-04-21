@@ -53,7 +53,9 @@ The current version has a lot of space for improvements. A few noted things are:
 - [ ] Adapt the agents and tasks concept from AutoGPT
 - [ ] Ability to have custom system prompts, system prompt can be provided by the user and can be saved into the bot db for usage by others. So it can be LinuxGPT, DrupalGPT, TechWriterGPT, JournalistGPT, TitleGenGPT all at the same time. What it can be will be infinite and as far as ones imagination would go.
 - [ ] Image to text, so that it can understand images too. Or wait for OpenAI to release there Image support they promised for GPT4. but we should still have a simple image to text for faster and smaller models like gpt-3.5-turbo
-- [ ] Ability to parse websites extract data
+- [X] Ability to parse websites extract data
+- [ ] Limit the number of tokens sent for URL data
+- [ ] smartly use a separate agent to verify if the user referred the URL, when not referred don't include the data chunk in the api.
 
 ## Examples
 ![image](https://user-images.githubusercontent.com/42465795/232779792-557e594c-67a4-4e24-9f53-afa65b4a94ea.png)

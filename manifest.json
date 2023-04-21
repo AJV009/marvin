@@ -7,7 +7,7 @@
     },
     "features": {
         "bot_user": {
-            "display_name": "ChatGPT",
+            "display_name": "Marvin",
             "always_online": true
         },
         "slash_commands": [
