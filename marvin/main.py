@@ -40,7 +40,7 @@ def handle_mention(body, say):
             say(openai.chat(), thread_ts=body["event"]["ts"])
 
 # Command to delete Marvin posted messages
-@app.command("/delete-marvin")
+@app.command("/marvin-delete")
 def handle_delete_command(ack, respond, command):
     url = command['text']
     ack()
