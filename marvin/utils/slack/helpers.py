@@ -68,3 +68,33 @@ class SlackHelpers:
             return response["user_id"]
         except SlackApiError as e:
             return []
+
+    def extract_timestamp_and_channel(self, url):
+        regex = r'https://(.+)\.slack\.com/archives/(?P<channel>[A-Za-z0-9]+)/p(?P<timestamp>\d+)'
+        match = re.match(regex, url)
+        if match:
+            channel = match.group('channel')
+            timestamp = match.group('timestamp')
+            timestamp = timestamp[:10] + '.' + timestamp[10:]
+            return channel, timestamp
+
+        return None
+
+    def delete_message(self, channel_id, ts):
+        try:
+            response = self.app.client.chat_delete(channel=channel_id, ts=ts)
+            if response['ok']:
+                message = f'Message deleted successfully in #{self.get_channel_name(channel_id)}'
+            else:
+                message = f'Error deleting message: {response["error"]}'
+        except SlackApiError as e:
+            message = f'Error deleting message: {e}'
+        return message
+
+    def get_channel_name(self, channel_id):
+        try:
+            channel_info = self.app.client.conversations_info(channel=channel_id)
+            channel_name = channel_info["channel"]["name"]
+            return channel_name
+        except SlackApiError as e:
+            return channel_id

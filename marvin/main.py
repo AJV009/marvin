@@ -39,6 +39,22 @@ def handle_mention(body, say):
         else:
             say(openai.chat(), thread_ts=body["event"]["ts"])
 
+# Command to delete Marvin posted messages
+@app.command("/marvin-delete")
+def handle_delete_command(ack, respond, command):
+    url = command['text']
+    ack()
+    if not url:
+        respond('Please provide a message URL', response_type='ephemeral')
+        return
+    result = slack_helpers.extract_timestamp_and_channel(url)
+    if not result:
+        respond('Invalid message URL', response_type='ephemeral')
+        return
+    channel_id, timestamp = result
+    message = slack_helpers.delete_message(channel_id, timestamp)
+    respond(message, response_type='ephemeral')
+
 # Main entry point
 if __name__ == "__main__":
     # Initialize SlackHelpers
