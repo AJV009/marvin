@@ -67,7 +67,8 @@ def handle_message_events(body, logger):
 @app.command("/week-log")
 def summarize_week(ack, respond, command):
     ack()
-    init_message = "/week-log triggered. \n[S1] *Fetching data from Notion 'AI Integration Workspace' page.*\n"
+    workspace_url = os.environ.get('NOTION_AI_INTEGRATION_WORKSPACE_URL')
+    init_message = "/week-log triggered. \n[S1] *Fetching data from Notion ['AI Integration Workspace']({workspace_url}) page.* (Scroll to the bottom to see the calendar with tasks)\n"
     trigger_happy = slack_helpers.post_message(command["channel_id"], init_message)
 
     try:
@@ -117,10 +118,11 @@ def summarize_week(ack, respond, command):
         for task in tasks:
             if t_id == 1:
                 init_message += (f"[S4] *Processing Notes:* \n")
-            current_page_query = page_query+task['id']+"/properties/title"
+            current_page_query = page_query+task['id']
             res = requests.get(current_page_query, headers=headers)
-            page = res.json()['results'][0]
-            page_title = page['title']['plain_text']
+            page = res.json()
+            page_title = page['properties']['Name']['title'][0]['plain_text']
+            page_url = page['url']
             complete_notion_context += ("Note " + str(t_id) + "\n Title: " + page_title + "\n")
 
             SKIP_BLOCK = False
@@ -135,7 +137,7 @@ def summarize_week(ack, respond, command):
                         for rich_text in rich_texts:
                             block_text += rich_text['plain_text'] + "\n"
                 complete_notion_context += ("Content: " + block_text + "\n\n")
-            init_message += (f"{str(t_id)}: *{page_title}* (Created on {task['created_time']}) \n")
+            init_message += (f"{str(t_id)}: *[{page_title}]({page_url})* (Created on {task['created_time']}) \n")
             _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
             t_id += 1
