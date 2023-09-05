@@ -74,11 +74,10 @@ def summarize_week(ack, respond, command):
         today = datetime.now().date()
         days_until_last_monday = today.weekday() + 7 if today.weekday() <= 3 else today.weekday()
         last_monday = today - timedelta(days=days_until_last_monday)
-        days_until_friday = 4 - today.weekday() if today.weekday() <= 3 else (4 + 7) - today.weekday()
-        last_friday = last_monday + timedelta(days=days_until_friday)
-        if last_friday > today:
-            last_monday -= timedelta(days=7)
-            last_friday -= timedelta(days=7)
+
+        # Calculate the next Sunday from last Friday
+        days_until_sunday = 6 - today.weekday() if today.weekday() <= 3 else (13 - today.weekday())
+        last_sunday = last_monday + timedelta(days=days_until_sunday)
 
         db_query = f"https://api.notion.com/v1/databases/{os.environ.get('NOTION_DB_ID')}/query"
         page_query = "https://api.notion.com/v1/pages/"
@@ -95,7 +94,7 @@ def summarize_week(ack, respond, command):
                 "property": "Date", 
                 "date": {
                     "on_or_after": str(last_monday),
-                    "on_or_before": str(last_friday + timedelta(days=2)) # taking Sunday into account
+                    "on_or_before": str(last_sunday)
                 }
             } 
         }
@@ -105,7 +104,7 @@ def summarize_week(ack, respond, command):
         tasks = res.json()['results']
         tasks.reverse()
         t_id = 1
-        init_message += (f"[S2] *Found {str(len(tasks))} notes between {last_monday} to {last_friday}* \n")
+        init_message += (f"[S2] *Found {str(len(tasks))} notes between {last_monday} to {last_sunday}* \n")
         for task in tasks:
             current_page_query = page_query+task['id']+"/properties/title"
             res = requests.get(current_page_query, headers=headers)
