@@ -130,7 +130,7 @@ def summarize_week(ack, respond, command):
 
             t_id += 1
 
-        init_message += ("\n[S3] *Data fetch complete. Summarizing the data using GPT-4.*\n\n")
+        init_message += ("\n[S3] *Data fetch complete. Summarizing the data using GPT-4.*\n")
         _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
         openai_system_message = {"role": "system", "content": """
@@ -176,8 +176,8 @@ Remember your only task is to simple return a summarised report in bullets
                 {
                     "type": "section",
                     "text": {
-                        "type": "mrkdwn",
-                        "text": f"{init_message} *[S4] Summarised data:* \n\n{{openai_response}}"
+                        "type": "text",
+                        "text": f"{init_message} [S4] *Summarised data:* \n{{openai_response}}"
                     }
                 }
             ]
