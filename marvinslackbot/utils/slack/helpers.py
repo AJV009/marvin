@@ -80,6 +80,14 @@ class SlackHelpers:
 
         return None
 
+    def get_channel_name(self, channel_id):
+        try:
+            channel_info = self.app.client.conversations_info(channel=channel_id)
+            channel_name = channel_info["channel"]["name"]
+            return channel_name
+        except SlackApiError as e:
+            return channel_id
+
     def delete_message(self, channel_id, ts):
         try:
             response = self.app.client.chat_delete(channel=channel_id, ts=ts)
@@ -91,10 +99,8 @@ class SlackHelpers:
             message = f'Error deleting message: {e}'
         return message
 
-    def get_channel_name(self, channel_id):
-        try:
-            channel_info = self.app.client.conversations_info(channel=channel_id)
-            channel_name = channel_info["channel"]["name"]
-            return channel_name
-        except SlackApiError as e:
-            return channel_id
+    def post_message(self, channel, text=None, blocks=None):
+        return self.app.client.chat_postMessage(channel=channel, text=text, blocks=blocks)
+    
+    def message_update(self, channel, ts, text=None, blocks=None):
+        return self.app.client.chat_update(channel=channel, ts=ts, text=text, blocks=blocks)

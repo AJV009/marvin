@@ -1,1 +1,1 @@
-~/Envs/marvin/bin/python -m marvin.main
+~/Envs/marvinslackbot/bin/python -m marvinslackbot.main
