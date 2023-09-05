@@ -67,8 +67,8 @@ def handle_message_events(body, logger):
 @app.command("/week-log")
 def summarize_week(ack, respond, command):
     ack()
-
-    trigger_happy = slack_helpers.post_message(command["channel_id"], "/week-log triggered. \nFetching data from Notion 'AI Integration Workspace' page",)
+    init_message = "/week-log triggered. \n[S1] *Fetching data from Notion 'AI Integration Workspace' page.*\n"
+    trigger_happy = slack_helpers.post_message(command["channel_id"], init_message)
 
     try:
         today = datetime.now().date()
@@ -105,7 +105,7 @@ def summarize_week(ack, respond, command):
         tasks = res.json()['results']
         tasks.reverse()
         t_id = 1
-        task_log_message = "/week-log triggered. \nFetching data from Notion 'AI Integration Workspace' page.\n"
+        init_message += (f"[S2] *Found {str(len(tasks))} notes between {last_monday} to {last_friday}* \n")
         for task in tasks:
             current_page_query = page_query+task['id']+"/properties/title"
             res = requests.get(current_page_query, headers=headers)
@@ -125,12 +125,13 @@ def summarize_week(ack, respond, command):
                         for rich_text in rich_texts:
                             block_text += rich_text['plain_text'] + "\n"
                 complete_notion_context += ("Content: " + block_text + "\n\n")
-            task_log_message += ("Processed Note " + str(t_id) + ": " + page_title + " (Created on " + task['created_time'] + ")")
-            _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], task_log_message)
+            init_message += (f"Processed Note *{str(t_id)}: {page_title}* (Created on {task['created_time']}) \n")
+            _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
             t_id += 1
 
-        _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], "Data fetched from Notion 'AI Integration Workspace'. \nSummarizing the data using GPT-4.")
+        init_message += ("\n[S3] *Data fetch complete. Summarizing the data using GPT-4.*\n\n")
+        _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
         openai_system_message = {"role": "system", "content": """
 You are my very useful personal assistant.
@@ -176,7 +177,7 @@ Remember your only task is to simple return a summarised report in bullets
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"Weekly log fetched from Notion 'AI Integration Workspace' page: ({last_monday} to {last_friday}) \n[Summarised using GPT-4]\n\n{{openai_response}}"
+                        "text": f"{init_message} *[S4] Summarised data:* \n\n{{openai_response}}"
                     }
                 }
             ]
