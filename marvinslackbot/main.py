@@ -172,15 +172,7 @@ Remember your only task is to simple return a summarised report in bullets
             update_interval = 2  # Set the update interval to 2 seconds
             last_update_time = time.time()
 
-            slack_response_template = [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "text",
-                        "text": f"{init_message} [S4] *Summarised data:* \n{{openai_response}}"
-                    }
-                }
-            ]
+            slack_response_template = f"{init_message} [S4] *Summarised data:* \n"
 
             for chunk in openai_response:
                 if 'content' in chunk['choices'][0]['delta']:
@@ -189,15 +181,15 @@ Remember your only task is to simple return a summarised report in bullets
                 current_time = time.time()
                 if current_time - last_update_time >= update_interval:
                     slack_response_block = copy.deepcopy(slack_response_template)
-                    slack_response_block[0]["text"]["text"] = slack_response_block[0]["text"]["text"].replace("{openai_response}", complete_openai_response)
-                    _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], blocks=slack_response_block, text="streaming response")
+                    slack_response_block += complete_openai_response
+                    _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], slack_response_block)
                     last_update_time = current_time
 
             # After processing all chunks, make one final update if needed
             if complete_openai_response:
                 slack_response_block = copy.deepcopy(slack_response_template)
-                slack_response_block[0]["text"]["text"] = slack_response_block[0]["text"]["text"].replace("{openai_response}", complete_openai_response)
-                _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], blocks=slack_response_block, text="streaming response")
+                slack_response_block += complete_openai_response
+                _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], slack_response_block)
     except Exception as e:
         print(e)
         _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], "Error occured: " + str(e) + "\n\nMessage will be auto deleted in 20 seconds.")
