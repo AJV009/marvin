@@ -105,6 +105,7 @@ def summarize_week(ack, respond, command):
         tasks = res.json()['results']
         tasks.reverse()
         t_id = 1
+        task_log_message = "/week-log triggered. \nFetching data from Notion 'AI Integration Workspace' page.\n"
         for task in tasks:
             current_page_query = page_query+task['id']+"/properties/title"
             res = requests.get(current_page_query, headers=headers)
@@ -124,8 +125,8 @@ def summarize_week(ack, respond, command):
                         for rich_text in rich_texts:
                             block_text += rich_text['plain_text'] + "\n"
                 complete_notion_context += ("Content: " + block_text + "\n\n")
-
-            _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], "/week-log triggered. \nFetching data from Notion 'AI Integration Workspace' page. \nProcessed Note " + str(t_id) + ": " + page_title + " (Created on " + task['created_time'] + ")")
+            task_log_message += ("Processed Note " + str(t_id) + ": " + page_title + " (Created on " + task['created_time'] + ")")
+            _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], task_log_message)
 
             t_id += 1
 
