@@ -67,8 +67,13 @@ def handle_message_events(body, logger):
 @app.command("/week-log")
 def summarize_week(ack, respond, command):
     ack()
+
+    # debug params
+    SKIP_BLOCK = False
+    SKIP_GENERATION = True
+
     workspace_url = os.environ.get('NOTION_AI_INTEGRATION_WORKSPACE_URL')
-    init_message = "/week-log triggered. \n[S1] *Fetching data from Notion ['AI Integration Workspace']({workspace_url}) page.* (Scroll to the bottom to see the calendar with tasks)\n"
+    init_message = f"/week-log triggered. \n[S1] *Fetching data from Notion <{workspace_url}|'AI Integration Workspace'> page.* (Scroll to the bottom to see the calendar with tasks)\n"
     trigger_happy = slack_helpers.post_message(command["channel_id"], init_message)
 
     try:
@@ -125,7 +130,6 @@ def summarize_week(ack, respond, command):
             page_url = page['url']
             complete_notion_context += ("Note " + str(t_id) + "\n Title: " + page_title + "\n")
 
-            SKIP_BLOCK = False
             if not SKIP_BLOCK:            
                 current_page_block_children = block_query+task['id']+"/children"
                 res = requests.get(current_page_block_children, headers=headers)
@@ -137,7 +141,7 @@ def summarize_week(ack, respond, command):
                         for rich_text in rich_texts:
                             block_text += rich_text['plain_text'] + "\n"
                 complete_notion_context += ("Content: " + block_text + "\n\n")
-            init_message += (f"{str(t_id)}: *[{page_title}]({page_url})* (Created on {task['created_time']}) \n")
+            init_message += (f"{str(t_id)}: *<{page_url}|{page_title}>* (Created on {task['created_time']}) \n")
             _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
             t_id += 1
@@ -170,7 +174,6 @@ Remember your only task is to simple return a summarised report in bullets
         """}
 
         openai_message_array = [openai_system_message, openai_user_message]
-        SKIP_GENERATION = False
         if not SKIP_GENERATION:
             init_openai = openai.return_openai()
             openai_response = init_openai.ChatCompletion.create(
