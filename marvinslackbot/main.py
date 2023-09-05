@@ -68,8 +68,8 @@ def handle_message_events(body, logger):
 def summarize_week(ack, respond, command):
     ack()
 
-    channel_gaurdrail = os.environ.get('SLACK_CHANNEL_GAUARDRAIL')
-    if int(channel_gaurdrail):
+    channel_guardrail = os.environ.get('SLACK_CHANNEL_GUARDRAIL')
+    if int(channel_guardrail):
         channel_ids = os.environ.get('SLACK_CHANNEL_IDS').lower().split('-')
         if command["channel_id"].lower() not in channel_ids:
             respond("You are not authorized to use this command. Please contact the owner of this bot.", response_type='ephemeral')
