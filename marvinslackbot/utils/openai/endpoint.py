@@ -3,21 +3,21 @@ import json
 import os
 from os.path import exists
 import random
-from marvin.utils.slack.helpers import SlackHelpers
-from marvin.utils.autogpt.autogpt import AutoGPT
+from marvinslackbot.utils.slack.helpers import SlackHelpers
+from marvinslackbot.utils.autogpt.autogpt import AutoGPT
 
 
 class OpenAIHelpers:
     def __init__(self):
         openai.organization = os.environ.get("OPENAI_ORG_ID")
         openai.api_key = os.environ.get("OPENAI_API_KEY")
-        self.thiking_file = "marvin/data/thinking.txt"
+        self.thiking_file = "marvinslackbot/data/thinking.txt"
         self.thinking_thoughts = []
         self.slack_helpers = SlackHelpers(init_self_app=True)
         self.messages = []
-        with open("marvin/data/prompts.json", "r") as f:
+        with open("marvinslackbot/data/prompts.json", "r") as f:
             self.prompts = json.load(f)
-        with open("marvin/data/flags.json", "r") as f:
+        with open("marvinslackbot/data/flags.json", "r") as f:
             self.flags = json.load(f)
 
     # Prefetch thinking thoughts
@@ -93,6 +93,16 @@ class OpenAIHelpers:
             message["content"] = new_content
 
         return model
+
+    def quickChat(self, messages, model):
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            )
+        return response['choices'][0]['message']['content']
+    
+    def return_openai(self):
+        return openai
 
     def chat(self):
         # empty response

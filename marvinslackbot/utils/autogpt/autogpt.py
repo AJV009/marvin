@@ -1,4 +1,4 @@
-from marvin.utils.autogpt.web_helper import WebHelper
+from marvinslackbot.utils.autogpt.web_helper import WebHelper
 
 class AutoGPT:
 
