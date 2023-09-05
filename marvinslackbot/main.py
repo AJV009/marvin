@@ -70,8 +70,8 @@ def summarize_week(ack, respond, command):
 
     channel_gaurdrail = os.environ.get('SLACK_CHANNEL_GAUARDRAIL')
     if int(channel_gaurdrail):
-        channel_ids = os.environ.get('SLACK_CHANNEL_IDS').split('-')
-        if command["channel_id"] not in channel_ids:
+        channel_ids = str.lower(os.environ.get('SLACK_CHANNEL_IDS')).split('-')
+        if command["channel_id"].lower() not in channel_ids:
             respond("You are not authorized to use this command. Please contact the owner of this bot.", response_type='ephemeral')
             return
 
