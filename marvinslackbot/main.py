@@ -115,6 +115,8 @@ def summarize_week(ack, respond, command):
         t_id = 1
         init_message += (f"[S2] *Found {str(len(tasks))} notes between {last_monday} to {last_sunday}* \n")
         for task in tasks:
+            if t_id == 1:
+                init_message += (f"[S4] *Processing Notes:* \n")
             current_page_query = page_query+task['id']+"/properties/title"
             res = requests.get(current_page_query, headers=headers)
             page = res.json()['results'][0]
@@ -133,12 +135,12 @@ def summarize_week(ack, respond, command):
                         for rich_text in rich_texts:
                             block_text += rich_text['plain_text'] + "\n"
                 complete_notion_context += ("Content: " + block_text + "\n\n")
-            init_message += (f"Processed Note *{str(t_id)}: {page_title}* (Created on {task['created_time']}) \n")
+            init_message += (f"{str(t_id)}: *{page_title}* (Created on {task['created_time']}) \n")
             _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
             t_id += 1
 
-        init_message += ("\n[S3] *Data fetch complete. Summarizing the data using GPT-4.*\n")
+        init_message += ("\n[S4] *Data fetch complete. Summarizing the data using GPT-4.*\n")
         _ = slack_helpers.message_update(command["channel_id"], trigger_happy['ts'], init_message)
 
         openai_system_message = {"role": "system", "content": """
@@ -180,7 +182,7 @@ Remember your only task is to simple return a summarised report in bullets
             update_interval = 2  # Set the update interval to 2 seconds
             last_update_time = time.time()
 
-            slack_response_template = f"{init_message} [S4] *Summarised data:* \n"
+            slack_response_template = f"{init_message}[S5] *Summarised data:* \n"
 
             for chunk in openai_response:
                 if 'content' in chunk['choices'][0]['delta']:
