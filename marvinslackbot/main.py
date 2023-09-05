@@ -91,12 +91,21 @@ def summarize_week(ack, respond, command):
 
         data = {
             "filter": {
-                "property": "Date", 
-                "date": {
-                    "on_or_after": str(last_monday),
-                    "on_or_before": str(last_sunday)
-                }
-            } 
+                "and": [
+                    {
+                        "property": "Date", 
+                        "date": {
+                            "on_or_after": str(last_monday),
+                        }
+                    },
+                    {
+                        "property": "Date", 
+                        "date": {
+                            "on_or_before": str(last_sunday)
+                        }
+                    },
+                ]
+            }
         }
 
         complete_notion_context = ""
