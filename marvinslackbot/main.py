@@ -70,7 +70,7 @@ def summarize_week(ack, respond, command):
 
     # debug params
     SKIP_BLOCK = False
-    SKIP_GENERATION = True
+    SKIP_GENERATION = False
 
     workspace_url = os.environ.get('NOTION_AI_INTEGRATION_WORKSPACE_URL')
     init_message = f"/week-log triggered. \n[S1] *Fetching data from Notion <{workspace_url}|'AI Integration Workspace'> page.* (Scroll to the bottom to see the calendar with tasks)\n"
